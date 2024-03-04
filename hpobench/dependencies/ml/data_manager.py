@@ -47,7 +47,7 @@ class OpenMLDataManager(DataManager):
             data_path = config_file.data_dir / "OpenML"
 
         self.data_path = Path(data_path)
-        openml.config.set_cache_directory(str(self.data_path))
+        openml.config.set_root_cache_directory(str(self.data_path))
 
         super(OpenMLDataManager, self).__init__()
 

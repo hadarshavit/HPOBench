@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import make_scorer, accuracy_score, balanced_accuracy_score, \
     precision_score, f1_score
+from sklearn.preprocessing import LabelEncoder
 
 from hpobench.abstract_benchmark import AbstractBenchmark
 from hpobench.dependencies.ml.data_manager import OpenMLDataManager
@@ -62,13 +63,29 @@ class MLBenchmark(AbstractBenchmark):
         dm = OpenMLDataManager(task_id, valid_size, data_path, global_seed)
         dm.load()
 
+        le = LabelEncoder()
+
         # Data variables
         self.train_X = dm.train_X
         self.valid_X = dm.valid_X
         self.test_X = dm.test_X
+        
         self.train_y = dm.train_y
         self.valid_y = dm.valid_y
         self.test_y = dm.test_y
+
+        # print(self.train_y)
+        # print(self.valid_y)
+        # print(self.test_y)
+
+        self.train_y = pd.Series(le.fit_transform(self.train_y))
+        self.valid_y = pd.Series(le.transform(self.valid_y))
+        self.test_y = pd.Series(le.transform(self.test_y))
+        print('HHH4')
+        # print(self.train_y)
+        # print(self.valid_y)
+        # print(self.test_y)
+
         self.train_idx = dm.train_idx
         self.test_idx = dm.test_idx
         self.task = dm.task
@@ -80,6 +97,7 @@ class MLBenchmark(AbstractBenchmark):
         # Observation and fidelity spaces
         self.fidelity_space = self.get_fidelity_space(self.seed)
         self.configuration_space = self.get_configuration_space(self.seed)
+        print('HHH5')
 
     @staticmethod
     def get_configuration_space(seed: Union[int, None] = None) -> CS.ConfigurationSpace:

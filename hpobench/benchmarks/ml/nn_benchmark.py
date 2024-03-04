@@ -41,7 +41,7 @@ class NNBenchmark(MLBenchmark):
                 'width', default_value=64, lower=16, upper=1024, log=True
             ),
             CS.UniformIntegerHyperparameter(
-                'batch_size', lower=4, upper=256, default_value=32, log=True
+                'batch_size', lower=128, upper=1024, default_value=256, log=True
             ),
             CS.UniformFloatHyperparameter(
                 'alpha', lower=10**-8, upper=1, default_value=10**-3, log=True

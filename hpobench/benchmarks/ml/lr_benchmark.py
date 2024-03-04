@@ -98,7 +98,7 @@ class LRBenchmark(MLBenchmark):
         # https://scikit-learn.org/stable/modules/sgd.html
         model = SGDClassifier(
             **config,
-            loss="log",  # performs Logistic Regression
+            loss="log_loss",  # performs Logistic Regression
             max_iter=fidelity["iter"],
             learning_rate="adaptive",
             tol=None,
