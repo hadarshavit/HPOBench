@@ -84,6 +84,32 @@ class OpenMLDataManager(DataManager):
 
         return
 
+    def load_no_lock(self, valid_size=None, verbose=False):
+        """Fetches data from OpenML and initializes the train-validation-test data splits
+
+        The validation set is fixed till this function is called again or explicitly altered
+        """
+        # fetches task
+        self.task = openml.tasks.get_task(self.task_id, download_data=False)
+        self.n_classes = len(self.task.class_labels)
+
+        # fetches dataset
+        self.dataset = openml.datasets.get_dataset(self.task.dataset_id, download_data=False)
+        if verbose:
+            self.logger.debug(self.task)
+            self.logger.debug(self.dataset)
+
+        data_set_path = self.data_path / "org/openml/www/datasets" / str(self.task.dataset_id)
+        successfully_loaded = self.try_to_load_data(data_set_path)
+        if successfully_loaded:
+            self.logger.info(f'Successfully loaded the preprocessed splits from '
+                             f'{data_set_path}')
+            return
+
+        assert False, 'Data not available'
+
+        return
+
     def try_to_load_data(self, data_path: Path) -> bool:
         path_str = "{}_{}.parquet.gzip"
         try:
@@ -132,7 +158,7 @@ class OpenMLDataManager(DataManager):
                 (
                     "cat",
                     make_pipeline(SimpleImputer(strategy="most_frequent"),
-                                  OneHotEncoder(sparse=False, handle_unknown="ignore")),
+                                  OneHotEncoder(sparse_output=False, handle_unknown="ignore")),
                     cat_idx.tolist(),
                 ),
                 (

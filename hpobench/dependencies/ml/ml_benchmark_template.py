@@ -37,7 +37,8 @@ class MLBenchmark(AbstractBenchmark):
             rng: Union[np.random.RandomState, int, None] = None,
             valid_size: float = 0.33,
             data_path: Union[str, Path, None] = None,
-            global_seed: int = 1
+            global_seed: int = 1,
+            without_lock=False
     ):
         super(MLBenchmark, self).__init__(rng=rng)
 
@@ -61,7 +62,10 @@ class MLBenchmark(AbstractBenchmark):
         self.data_path = Path(data_path)
 
         dm = OpenMLDataManager(task_id, valid_size, data_path, global_seed)
-        dm.load()
+        if without_lock:
+            dm.load_no_lock()
+        else:
+            dm.load()
 
         le = LabelEncoder()
 

@@ -23,8 +23,9 @@ class SVMBenchmark(MLBenchmark):
                  task_id: int,
                  rng: Union[np.random.RandomState, int, None] = None,
                  valid_size: float = 0.33,
-                 data_path: Union[str, None] = None):
-        super(SVMBenchmark, self).__init__(task_id, rng, valid_size, data_path)
+                 data_path: Union[str, None] = None,
+                 without_lock=False):
+        super(SVMBenchmark, self).__init__(task_id, rng, valid_size, data_path, without_lock=without_lock)
 
         self.cache_size = 200
 

@@ -24,8 +24,9 @@ class HistGBBenchmark(MLBenchmark):
                  task_id: int,
                  rng: Union[np.random.RandomState, int, None] = None,
                  valid_size: float = 0.33,
-                 data_path: Union[str, None] = None):
-        super(HistGBBenchmark, self).__init__(task_id, rng, valid_size, data_path)
+                 data_path: Union[str, None] = None,
+                 without_lock=False):
+        super(HistGBBenchmark, self).__init__(task_id, rng, valid_size, data_path, without_lock=without_lock)
 
     @staticmethod
     def get_configuration_space(seed: Union[int, None] = None) -> CS.ConfigurationSpace:
